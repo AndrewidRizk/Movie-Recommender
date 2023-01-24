@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Trailer Recommendations</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center my-5">Trailer Recommendations</h1>
+      <div id="trailer-carousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          {% for i in range(movies|length) %}
+            <li data-target="#trailer-carousel" data-slide-to="{{i}}" {% if i == 0 %}class="active"{% endif %}></li>
+          {% endfor %}
+        </ol>
+        <div class="carousel-inner">
+          {% for movie in movies %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+              <iframe class="d-block w-100" src="{{ movie.youtube_link }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <div class="carousel-caption d-none d-md-block">
+                <h5>{{ movie.description }}</h5>
+                <button class="btn btn-primary" onclick="addToWatchedList('{{ movie.description }}')">Add to Watched List</button>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#trailer-carousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#trailer-carousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        function addToWatchedList(movie) {
+          // code to add movie to watched list
+          // you can use AJAX to send a request to the server and add the movie to the watched list in the database
+          // or you can use a javascript object/array to store the watched movies on the client side
+          console.log(`${movie} added to watched list`);
+        }
+      </script>
+      
