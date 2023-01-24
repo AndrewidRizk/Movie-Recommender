@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    
+
+
+<head>
+    <title>Welcome Screen</title>
+    <style>
+        /* Add some cool effects */
+        body {
+            background-image: url("/static/Jiangnan_Photography.jpg");
+            background-size: 2000px 1000px;
+            background-repeat: no-repeat;
+        }
+
+        /* Center the text */
+        .welcome-box {
+            position: absolute;
+            color: rgb(54, 24, 187);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+
+        /* Add some hover effect on the button */
+        .welcome-box input[type="submit"] {
+            border: none;
+            outline: none;
+            height: 40px;
+            width: 120px;
+            background: #1c8adb;
+            color: #fff;
+            font-size: 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: 0.2s ease-in-out;
+        }
+        .welcome-box input[type="submit"]:hover {
+            background: #313b35;
+            
+        }
+
+        
+
+    </style>
+</head>
+
+<body>
+    
+    <div class="welcome-box">
+        <br>
+        <br>
+        Welcome to 
+        <br>
+         Movie Recommender
+         <br>
+         <form action="/login" method="get">
+            <input type="submit" value="Login">
+        </form>
+            
+    </div>
+</body>
+
+</html>
