@@ -30,3 +30,12 @@ And try to login again, As you can see A username and passowrd are added to the 
 And when you click login now it will take you to the home page 
 
 ![image](https://user-images.githubusercontent.com/97995173/215023841-702dded9-3fe6-4d43-bc24-ed39d4cd5852.png)
+
+Before inserting anymovies the website will recommend some of the best movies up to date, Showing the name of the movie, rating, and the genres
+
+![image](https://user-images.githubusercontent.com/97995173/215024197-545b04cd-8498-4c7b-9dac-2f5f0076821e.png)
+
+When you add a movie in your movie list the recommender will recommend movies depends on the genres of the movies that you added in your movie list 
+
+
+
