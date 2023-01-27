@@ -37,5 +37,9 @@ Before inserting anymovies the website will recommend some of the best movies up
 
 When you add a movie in your movie list the recommender will recommend movies depends on the genres of the movies that you added in your movie list 
 
+![image](https://user-images.githubusercontent.com/97995173/215024766-ce13ee05-3699-4c00-b990-0ac8d0ac97b4.png)
+
+And the more movie you add the best the recommended movies 
+
 
 
