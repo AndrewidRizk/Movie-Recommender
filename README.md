@@ -21,3 +21,12 @@ so if you tried to login you will be asked to write username and password again 
 
 Lets sign up with the username Andrewid and password Andrewid 
 
+![image](https://user-images.githubusercontent.com/97995173/215023457-8785fa3f-43e6-4b85-89b8-1c9c76728dd9.png)
+
+And try to login again, As you can see A username and passowrd are added to the database 
+
+![image](https://user-images.githubusercontent.com/97995173/215023786-b7abfaa9-7793-4e43-9a1d-2d6922b1f656.png)
+
+And when you click login now it will take you to the home page 
+
+![image](https://user-images.githubusercontent.com/97995173/215023841-702dded9-3fe6-4d43-bc24-ed39d4cd5852.png)
