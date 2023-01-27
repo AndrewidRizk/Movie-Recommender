@@ -4,10 +4,11 @@ A movie recommender a website that uses IMDB and YouTube APIs, And stores the us
 ![image](https://user-images.githubusercontent.com/97995173/215014937-91e47e81-62c0-438d-8221-45119b5b36ff.png)
 
 
-# packages to install 
+# packages to install ⬇
 - pip install flask
 - pip install imdbpy
 - pip install --upgrade google-api-python-client
 - pip install mysql-connector-python
 
-
+# About the website and the Data Base 
+When you chlick on login, it takes you to the login screen
