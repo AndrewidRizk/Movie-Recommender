@@ -298,14 +298,14 @@ def add_movie(username, movie):
     cnx.commit()
     cursor.close()  
     cnx.close()
-
+ 
 
 # returns the list of movies for corrosponds to the username
 def Movie_list(username):
     cnx = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="********",
+        password="******",
         database="MovieRecommender"
         )
     cursor = cnx.cursor()
