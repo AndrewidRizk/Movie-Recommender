@@ -210,7 +210,7 @@ def add(username,password):
     mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="********",
+    password="Androwmaged3030",
     database="MovieRecommender"
     )
     mycursor = mydb.cursor()
@@ -232,7 +232,7 @@ def ifExist(username):
     mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="********",
+    password="Androwmaged3030",
     database="MovieRecommender"
     )
 
@@ -254,7 +254,7 @@ def if_Password_is_right(username, password):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="********",
+        password="Androwmaged3030",
         database="MovieRecommender"
         )
     try:
@@ -279,7 +279,7 @@ def add_movie(username, movie):
     cnx = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="********",
+        password="Androwmaged3030",
         database="MovieRecommender"
         )
     cursor = cnx.cursor()
@@ -305,7 +305,7 @@ def Movie_list(username):
     cnx = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="******",
+        password="Androwmaged3030",
         database="MovieRecommender"
         )
     cursor = cnx.cursor()
