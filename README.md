@@ -1,5 +1,5 @@
-# Movie-Recommender
-A movie recommender a website that uses IMDB and YouTube APIs, And stores the users Userename, Passowrd, and movie list in a SQL database. then uses his movie list to generate a recommended movie list according to his most watched genres.
+# Overview
+A website that uses IMDB and YouTube APIs, And stores the users Userename, Passowrd, and movie list in a SQL database. then uses his movie list to generate a recommended movie list according to his most watched genres.
 
 ![image](https://user-images.githubusercontent.com/97995173/215014937-91e47e81-62c0-438d-8221-45119b5b36ff.png)
 
