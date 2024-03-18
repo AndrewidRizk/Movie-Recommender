@@ -270,7 +270,6 @@ def if_Password_is_right(username, password):
                 print("Password does not match.")
     finally:
         mydb.close()
-
         return result
 
 
