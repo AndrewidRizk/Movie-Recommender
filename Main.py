@@ -17,11 +17,11 @@ import mysql.connector
 app = Flask(__name__)
 
 # ---------------------------------------------------------Movie Recommondation--------------------------------------------
-movie_db = IMDb()
 # given the name of the movie, gives the genres (category) of the movie
 # @param name_of_the_movie --> takes the name of the movie
 # @return Genres of the movie name given
 def get_genres(name_of_the_movie: str):
+    movie_db = IMDb()  # Data Base of IMDb
     movies = movie_db.search_movie(name_of_the_movie)  # A list of all the movies for this name
     movie = movies[0]  # Get the first movie in the list
     movie_db.update(movie)
@@ -30,38 +30,62 @@ def get_genres(name_of_the_movie: str):
     return genres[0]
 
 
-# Given genres, generates a list of recommended movies
-def get_recommended(genres: str, limit=10):
-    top_movies = movie_db.get_top250_movies()
+# given the genres, generate a list of recommendations
+# @param genres --> takes the genres
+# @return A list of top 10 recommended movies
+def get_recommended(genres: str):
+    movie_db = imdb.IMDb()
+    top_movies = movie_db.get_top250_movies()  # Get top 250 movies
     recommended_movies = []
+
+    # Iterate through the top movies and filter by genres
     for movie in top_movies:
-        if genres.lower() in [genre.lower() for genre in movie.get('genres', [])]:
-            recommended_movies.append(movie.get('title'))
-        if len(recommended_movies) >= limit:
-            break
+        movie_db.update(movie)
+        movie_genres = movie.get('genres', [])
+        if genres.lower() in [genre.lower() for genre in movie_genres]:
+            recommended_movies.append(movie['title'])
+            if len(recommended_movies) == 10:
+                break
+
     return recommended_movies
 
-# Given a list of watched movies, returns a recommended list of movies
+
+# checks for the most watched genres
+# @param list_of_movies: list of watched movies by name
+# @return recommended list of movies
 def get_recommended_list(list_of_movies):
-    genre_appearances = {}
-    for movie in list_of_movies:
-        genres = get_genres(movie)
-        for genre in genres:
-            genre_appearances[genre] = genre_appearances.get(genre, 0) + 1
-    if genre_appearances:
-        max_genre = max(genre_appearances, key=genre_appearances.get)
-        return get_recommended(max_genre)
-    else:
-        return []
+    genre_list = []
+    genres = ['Comedy', 'Romance', 'Drama', 'Animation', 'SCI-FI', 'Action',
+              'Mystery', 'Adventure', 'Horror', 'Crime',
+              'Fantasy', 'SuperHero']
+    number_of_appearances = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    maxAppearance = 0
+    maxIndex = 0
+
+    for z in range(len(list_of_movies)):
+        genre_list.append(get_genres(list_of_movies[z]))
+
+    # updating number of appearance of each genre
+    for y in genre_list:
+        for x in range(12):
+            if y == genres[x]:
+                number_of_appearances[x] = number_of_appearances[x] + 1
+                if number_of_appearances[x] > maxAppearance:
+                    maxAppearance = number_of_appearances[x]
+                    maxIndex = x
+
+    return get_recommended(genres[maxIndex])
 
 # this function takes the movie title and returns its rating 
 # @param movive title
 # @return the rating in float  
 def get_movie_rating(movie_title):
+    # Initialize the IMDb class
+    ia = IMDb()
     
     # Search for the movie
-    movie = movie_db.search_movie(movie_title)[0]
-    movie_db.update(movie)
+    movie = ia.search_movie(movie_title)[0]
+    ia.update(movie)
     
     # Get the rating of the movie
     rating = movie.get('rating', 'N/A')
@@ -86,7 +110,6 @@ def find_trailer(name):
     if data["items"]:
         video_id = data["items"][0]["id"]["videoId"]
         link = "https://www.youtube.com/embed/"+video_id
-        #print(link)
     else:
         print("No video found.")
 
@@ -133,44 +156,34 @@ def SignUp():
         
 
 
+counter = 0  # Initialize the counter outside of any function
+
 @app.route('/success', methods=['GET', 'POST'])
 def success():
     global counter
-    counter = 1
-    if len(Movie_list(UserName)) == 1:
+    counter = 0  # Reset counter to 0 upon entering the success route
+    if len( Movie_list(UserName)) == 1:
         recommended_list = get_recommended('Drama')
-    else:
-        recommended_list = get_recommended_list(Movie_list(UserName))
-
-    if counter < len(recommended_list):
         name = recommended_list[counter]
         genres = get_genres(name)
         youtube = find_trailer(name)
         rate = get_movie_rating(name)
     else:
-        name = ""
-        genres = ""
-        youtube = ""
-        rate = ""
-
+        recommended_list = get_recommended_list(Movie_list(UserName))
+        name = recommended_list[counter]
+        genres = get_genres(name)
+        youtube = find_trailer(name)
+        rate = get_movie_rating(name)
     if request.method == 'POST':
         MovieInsert1 = request.form['MovieInsert']
         add_movie(UserName, MovieInsert1)
         recommended_list = get_recommended_list(Movie_list(UserName))
-        if counter < len(recommended_list):
-            name = recommended_list[counter]
-            genres = get_genres(name)
-            youtube = find_trailer(name)
-            rate = get_movie_rating(name)
-        else:
-            name = ""
-            genres = ""
-            youtube = ""
-            rate = ""
-        return render_template('MovieRecommender.html', movie_list=Movie_list(UserName), youtube=youtube,
-                               genres=genres, name=name, rate=rate)
-    return render_template('MovieRecommender.html', movie_list=Movie_list(UserName), youtube=youtube, genres=genres,
-                           name=name, rate=rate)
+        name = recommended_list[counter]
+        genres = get_genres(name)
+        youtube = find_trailer(name)
+        rate = get_movie_rating(name)
+        return render_template('MovieRecommender.html', movie_list = Movie_list(UserName), youtube = youtube, genres = genres, name = name, rate = rate )
+    return render_template('MovieRecommender.html', movie_list = Movie_list(UserName), youtube = youtube, genres = genres, name = name, rate = rate )
 
 
 
@@ -178,22 +191,20 @@ def success():
 def nextMovie():
     global counter
     if request.method == 'POST':
-        if len( Movie_list(UserName)) == 1:
+        if len(Movie_list(UserName)) == 1:
             recommended_list = get_recommended('Drama')
-            counter = counter + 1
-            name = recommended_list[counter]
-            genres = get_genres(name)
-            youtube = find_trailer(name)
-            rate = get_movie_rating(name)
+            counter += 1  # Increment counter
+            if counter < len(recommended_list):  # Check if counter is within bounds
+                name = recommended_list[counter]
+                # Rest of the code for getting genres, trailer, and rating...
         else:
             recommended_list = get_recommended_list(Movie_list(UserName))
-            counter = counter + 1
-            name = recommended_list[counter]
-            genres = get_genres(name)
-            youtube = find_trailer(name)
-            rate = get_movie_rating(name)
-        return render_template('MovieRecommender.html', movie_list = Movie_list(UserName), youtube = youtube, genres = genres, name = name, rate = rate )
-    return render_template('MovieRecommender.html', movie_list = Movie_list(UserName), youtube = youtube, genres = genres, name = name, rate = rate )
+            counter += 1  # Increment counter
+            if counter < len(recommended_list):  # Check if counter is within bounds
+                name = recommended_list[counter]
+                # Rest of the code for getting genres, trailer, and rating...
+        return render_template('MovieRecommender.html', movie_list=Movie_list(UserName), youtube=youtube, genres=genres, name=name, rate=rate)
+    return render_template('MovieRecommender.html', movie_list=Movie_list(UserName), youtube=youtube, genres=genres, name=name, rate=rate)
 
 
 
