@@ -21,8 +21,8 @@ app = Flask(__name__)
 
 
 # TMDb API key (replace 'YOUR_API_KEY' with your actual API key)
-tmdb.API_KEY = 'a7a'
-API_KEY = 'a7a'
+tmdb.API_KEY = '4ea0432fe4d2e57ddd43b5aee68d817b'
+API_KEY = '4ea0432fe4d2e57ddd43b5aee68d817b'
 
 
 # given the name of the movie, gives the genres (category) of the movie
@@ -57,8 +57,8 @@ def get_recommended(genres: str):
     # Get genre IDs
     genre_ids = ','.join([str(genre_id) for genre_id in get_genre_ids(genres)])
 
-    # Get top rated movies by specified genres
-    discover_url = f"https://api.themoviedb.org/3/discover/movie?api_key={API_KEY}&sort_by=vote_average.desc&with_genres={genre_ids}"
+    # Get top rated movies by specified genres, sorted by popularity
+    discover_url = f"https://api.themoviedb.org/3/discover/movie?api_key={API_KEY}&sort_by=popularity.desc&with_genres={genre_ids}"
     response = requests.get(discover_url)
     data = response.json()
 
@@ -68,20 +68,21 @@ def get_recommended(genres: str):
     return top_10_movies
 
 
-# Helper function to get TMDb genre IDs by genre names
-def get_genre_ids(genres):
-    genre_list_url = f"https://api.themoviedb.org/3/genre/movie/list?api_key={API_KEY}"
-    response = requests.get(genre_list_url)
-    data = response.json()
-    genre_ids = []
-
-    for genre in genres:
-        for item in data['genres']:
-            if item['name'] == genre:
-                genre_ids.append(item['id'])
-                break
-
-    return genre_ids
+def get_genre_ids(genres: str):
+    genre_ids = {
+        'comedy': 35,
+        'romance': 10749,
+        'drama': 18,
+        'animation': 16,
+        'science fiction': 878,
+        'action': 28,
+        'mystery': 9648,
+        'adventure': 12,
+        'horror': 27,
+        'crime': 80,
+        'fantasy': 14
+    }
+    return [genre_ids[genre.strip().lower()] for genre in genres.split(',') if genre.strip().lower() in genre_ids]
 
 
 
@@ -91,27 +92,24 @@ def get_genre_ids(genres):
 def get_recommended_list(list_of_movies):
     genre_list = []
     genres = ['Comedy', 'Romance', 'Drama', 'Animation', 'Science Fiction', 'Action',
-              'Mystery', 'Adventure', 'Horror', 'Crime',
-              'Fantasy', 'Science Fiction']
+              'Mystery', 'Adventure', 'Horror', 'Crime', 'Fantasy']
     number_of_appearances = [0] * len(genres)
-    maxAppearance = 0
-    maxIndex = 0
 
     for movie_title in list_of_movies:
         genre = get_genres(movie_title)
         if genre:
-            genre_list.append(genre)
-
-    # updating number of appearance of each genre
+            genre_list.extend(genre)  # extend instead of append to flatten the genre_list
+    # Count the number of appearances of each genre
     for genre in genre_list:
-        for index, genre_name in enumerate(genres):
-            if genre == genre_name:
-                number_of_appearances[index] += 1
-                if number_of_appearances[index] > maxAppearance:
-                    maxAppearance = number_of_appearances[index]
-                    maxIndex = index
-
-    return get_recommended(genres[maxIndex])
+        if genre in genres:
+            index = genres.index(genre)
+            number_of_appearances[index] += 1
+        
+    # Find the genre with the maximum number of appearances
+    max_index = number_of_appearances.index(max(number_of_appearances))
+    most_common_genre = genres[max_index]
+    
+    return get_recommended(most_common_genre)
 
 
 # this function takes the movie title and returns its rating 
@@ -131,37 +129,24 @@ def get_movie_rating(movie_title):
 
 # -------------------------------------------------------------------------------------------------------------------------
 
-# Example usage:
-movie_name = "Inception"
-movie_genres = get_genres(movie_name)
-if movie_genres:
-    recommended_movies = get_recommended(movie_genres)
-    print(f"Top 10 recommended movies for {movie_name} genres:", recommended_movies)
-else:
-    print("Movie not found.")
 
 
 # ---------------------------------------------------------Youtube Api----------------------------------------------------
 # Find trailer using youtube API
 def find_trailer(name):
-    api_key = "A7A"
+    api_keys = ["API1" , "API2"]  # Add your API keys here
 
-    movie_name =  name
-
-    search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={movie_name}+trailer&type=video&key={api_key}"
-
-    response = requests.get(search_url)
-
-    data = response.json()
-
-    if data["items"]:
-        video_id = data["items"][0]["id"]["videoId"]
-        link = "https://www.youtube.com/embed/"+video_id
-        #print(link)
-    else:
-        print("No video found.")
-
-    return link
+    for api_key in api_keys:
+        search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={name}+trailer&type=video&key={api_key}"
+        response = requests.get(search_url)
+        data = response.json()
+        print("API {api_key} tested")
+        if data.get("items"):
+            video_id = data["items"][0]["id"]["videoId"]
+            link = "https://www.youtube.com/embed/" + video_id
+            return link
+    print("No video found.")
+    return None
 
 # ---------------------------------------------------------Flask----------------------------------------------------
 
@@ -192,7 +177,7 @@ def SignUp():
             username = request.form['username']
             password = request.form['password']
             ConfirmPassword = request.form['ConfirmPassword']
-            if password == ConfirmPassword:
+            if password == ConfirmPassword and not ifExist(username):
                 add(username,password)
                 return render_template('LoginScreen.html')
             else:
@@ -204,10 +189,15 @@ def SignUp():
         
 
 
+# Example usage:
+
+
 @app.route('/success', methods=['GET', 'POST'])
 def success():
     global counter
     counter = 0
+    if counter == 11:
+        counter = 0
     if len( Movie_list(UserName)) == 0:
         recommended_list = get_recommended('Drama')
         name = recommended_list[counter]
@@ -236,6 +226,8 @@ def success():
 @app.route('/next', methods=['GET', 'POST'])
 def nextMovie():
     global counter
+    if counter == 11:
+        counter = 0
     if request.method == 'POST':
         if len( Movie_list(UserName)) == 1:
             recommended_list = get_recommended('Drama')
@@ -309,22 +301,22 @@ def if_Password_is_right(username, password):
         user="root",
         password="Androwmaged3030",
         database="MovieRecommender"
-        )
+    )
     try:
         with mydb.cursor() as cursor:
             # Execute the SELECT statement to retrieve the stored password for the given username
             sql = "SELECT Password FROM user WHERE Username = %s"
             cursor.execute(sql, (username,))
             result = cursor.fetchone()
-            # Compare the stored password to the input password
-            if result['Password'] == password:
-                print("Password match.")
-            else:
-                print("Password does not match.")
+            if result is not None:  # Check if result is not None
+                # Compare the stored password to the input password
+                if result[0] == password:  # Access password using index 0
+                    print("Password match.")
+                    return True
+            print("Password does not match or user not found.")
+            return False
     finally:
         mydb.close()
-
-        return result
 
 
 # add function that add a movie to the list of movies for every user

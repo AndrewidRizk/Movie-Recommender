@@ -8,21 +8,37 @@
     <style>
         /* Add some cool effects */
         body {
-            background-image: url("/static/Jiangnan_Photography.jpg");
-            background-size: 2000px 1000px;
-            background-repeat: no-repeat;
+            background-color: #1b201d;
+            overflow: hidden;
         }
+        .image {
+        top: 50%;
+        left: 50%;
+        width: 1000px;
+        height: 600px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        border-radius: 5%;
+        filter: blur(4px); /* Adjust the blur radius as needed */
+        background-size: cover; /* Ensure the background covers the entire area */
+        background-repeat: no-repeat; /* Prevent background image from repeating */
+        transition: background-image 0.5s ease; /* Transition animation for background image */
+
+}
 
         /* Center the text */
         .welcome-box {
             position: absolute;
-            color: rgb(54, 24, 187);
+            color: rgb(255, 255, 255);
+            background-color: rgba(16, 86, 136, 0.9);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             font-size: 48px;
             font-weight: bold;
+            padding: 30px 30px;
+            border-radius: 10px;
         }
 
 
@@ -51,7 +67,8 @@
 </head>
 
 <body>
-    
+    <img id="movieImage" class="image" alt="Movie Scene">
+
     <div class="welcome-box">
         <br>
         <br>
@@ -64,6 +81,40 @@
         </form>
             
     </div>
+    <script>
+        // Define an array of movie image paths
+        const movieImages = [
+            "../static/movie1.jpeg",
+            "../static/movie2.jpeg",
+            "../static/movie3.jpeg",
+            "../static/movie4.jpeg",
+            "../static/movie6.jpeg",
+            "../static/movie7.jpeg",
+            "../static/movie8.jpeg",
+            "../static/movie9.jpeg",
+            // Add more movie images as needed
+        ];
+
+        // Function to randomly select a movie image from the array
+        function getRandomMovieImage() {
+            const randomIndex = Math.floor(Math.random() * movieImages.length);
+            return movieImages[randomIndex];
+        }
+
+        // Function to update the image source every 'interval' milliseconds
+        function updateMovieImage() {
+            const movieImage = document.getElementById("movieImage");
+            const newImageSrc = getRandomMovieImage();
+            movieImage.style.backgroundImage = `url('${newImageSrc}')`;
+        }
+
+        // Initial call to update the image source
+        updateMovieImage();
+
+        // Set interval to update the image source every 'interval' milliseconds
+        const interval = 5000; // Change this value to adjust the interval in milliseconds
+        setInterval(updateMovieImage, interval);
+    </script>
 </body>
 
 </html>
