@@ -13,7 +13,7 @@ import requests
 
 # -------------------------------------------------------------------------------------------------------------------------
 
-application = Flask(__name__)
+app = Flask(__name__)
 
 # ---------------------------------------------------------Movie Recommondation--------------------------------------------
 
@@ -149,11 +149,11 @@ def find_trailer(name):
 # ---------------------------------------------------------Flask----------------------------------------------------
 
 
-@application.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def WelcomeScreen():
     return render_template('WelcomeScreen.html')
 
-@application.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         username = request.form['username']
@@ -168,7 +168,7 @@ def index():
     return render_template('LoginScreen.html')
 
 
-@application.route('/SignUp', methods=['GET', 'POST'])
+@app.route('/SignUp', methods=['GET', 'POST'])
 def SignUp():
     if request.method == 'POST':
         if 'username' in request.form and 'password' in request.form and 'ConfirmPassword' in request.form:
@@ -190,7 +190,7 @@ def SignUp():
 # Example usage:
 
 
-@application.route('/success', methods=['GET', 'POST'])
+@app.route('/success', methods=['GET', 'POST'])
 def success():
     global counter
     counter = 0
@@ -221,7 +221,7 @@ def success():
 
 
 
-@application.route('/next', methods=['GET', 'POST'])
+@app.route('/next', methods=['GET', 'POST'])
 def nextMovie():
     global counter
     
@@ -364,5 +364,3 @@ def Movie_list(username):
     cnx.close()
     return movies_list
 # -------------------------------------------------------------------------------------------------------------------------
-if __name__ == '__main__':
-    application.run(debug=True)
