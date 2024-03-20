@@ -9,6 +9,7 @@ from googleapiclient.errors import HttpError
 import mysql.connector
 import tmdbsimple as tmdb
 import requests
+from werkzeug.wrappers import Request, Response
 
 
 # -------------------------------------------------------------------------------------------------------------------------
