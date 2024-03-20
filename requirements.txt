@@ -1,0 +1,4 @@
+Flask==2.0.2
+google-api-python-client==2.32.0
+mysql-connector-python==8.0.28
+tmdbsimple==2.8.0
