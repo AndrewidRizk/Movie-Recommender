@@ -136,10 +136,6 @@ def get_movie_rating(movie_title):
 def find_trailer(name):
     api_key_Y1 = os.environ.get('api_key_Y1')
     api_key_Y2 = os.environ.get('api_key_Y2')
-    for key, value in os.environ.items():
-        print(f"{key}: {value}")
-    print(api_key_Y1)
-    print(api_key_Y2)
     api_keys = [api_key_Y1 , api_key_Y2]  # Add your API keys here
 
     for api_key in api_keys:
