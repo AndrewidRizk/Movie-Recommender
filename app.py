@@ -10,11 +10,14 @@ import mysql.connector
 import tmdbsimple as tmdb
 import requests
 from werkzeug.wrappers import Request, Response
+from flask_sqlalchemy import SQLAlchemy
 
 
 # -------------------------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
+db = SQLAlchemy(app)
 
 # ---------------------------------------------------------Movie Recommondation--------------------------------------------
 
