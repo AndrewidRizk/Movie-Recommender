@@ -17,9 +17,7 @@ from flask_sqlalchemy import SQLAlchemy
 # -------------------------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__)
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
-db = SQLAlchemy(app)
+
 print(os.environ.get('DB_HOST'))
 print(os.environ.get('DB_USER'))
 print(os.environ.get('DB_PASSWORD'))
