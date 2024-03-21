@@ -10,6 +10,7 @@ import mysql.connector
 import tmdbsimple as tmdb
 import requests
 from werkzeug.wrappers import Request, Response
+import os
 
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +134,9 @@ def get_movie_rating(movie_title):
 # ---------------------------------------------------------Youtube Api----------------------------------------------------
 # Find trailer using youtube API
 def find_trailer(name):
-    api_keys = ["APIcccccccc1" , "API2"]  # Add your API keys here
+    api_key_Y1 = os.environ.get('api_key_Y1')
+    api_key_Y2 = os.environ.get('api_key_Y2')
+    api_keys = [api_key_Y1 , api_key_Y2]  # Add your API keys here
 
     for api_key in api_keys:
         search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={name}+trailer&type=video&key={api_key}"
