@@ -143,7 +143,7 @@ def get_movie_rating(movie_title):
 def find_trailer(name):
     api_key_Y1 = os.environ.get('api_key_Y1')
     api_key_Y2 = os.environ.get('api_key_Y2')
-    api_keys = [api_key_Y1 , api_key_Y2]  # Add your API keys here
+    api_keys = [api_key_Y1 , "api_key_Y2"]  # Add your API keys here
 
     for api_key in api_keys:
         search_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={name}+trailer&type=video&key={api_key}"
@@ -205,8 +205,7 @@ def SignUp():
 def success():
     global counter
     counter = 0
-    if counter == 11:
-        counter = 0
+    
     if len( Movie_list(UserName)) == 0:
         recommended_list = get_recommended('Drama')
         name = recommended_list[counter]
@@ -239,14 +238,14 @@ def nextMovie():
     if request.method == 'POST':
         if len( Movie_list(UserName)) == 1:
             recommended_list = get_recommended('Drama')
-            counter = counter + 1
+            counter = (counter + 1) % 10  # Ensures counter loops back to 0 when it reaches 11
             name = recommended_list[counter]
             genres = get_genres(name)
             youtube = find_trailer(name)
             rate = get_movie_rating(name)
         else:
             recommended_list = get_recommended_list(Movie_list(UserName))
-            counter = counter + 1
+            counter = (counter + 1) % 10  # Ensures counter loops back to 0 when it reaches 11
             name = recommended_list[counter]
             genres = get_genres(name)
             youtube = find_trailer(name)
