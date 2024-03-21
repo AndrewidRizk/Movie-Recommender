@@ -11,7 +11,6 @@ import tmdbsimple as tmdb
 import requests
 from werkzeug.wrappers import Request, Response
 import os
-from flask_sqlalchemy import SQLAlchemy
 
 
 # -------------------------------------------------------------------------------------------------------------------------
