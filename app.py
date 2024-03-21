@@ -18,10 +18,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-mysql_host = os.environ.get('DB_HOST')
-mysql_user = os.environ.get('DB_USER')
-mysql_password = os.environ.get('DB_PASSWORD')
-mysql_db = os.environ.get('DB_NAME')
+mysql_host= os.environ.get('DB_HOST')
+mysql_user= os.environ.get('DB_USER') 
+mysql_password=  os.environ.get('DB_PASSWORD') 
+mysql_port= os.environ.get('DB_PORT')
+mysql_db= os.environ.get('DB_NAME') 
+
 # ---------------------------------------------------------Movie Recommondation--------------------------------------------
 
 
@@ -256,13 +258,16 @@ def nextMovie():
 
 # ------------------------------------------------MYSQL-------------------------------------------------------
 
+
+
 ## regester the username and password to the database
 def add(username,password):
     mydb = mysql.connector.connect(
-    host=mysql_host,
-    user=mysql_user,
-    password=mysql_password,
-    database=mysql_db
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        port=mysql_port,
+        database=mysql_db
     )
     mycursor = mydb.cursor()
     sql = "INSERT INTO user (Username, Password, Movies) VALUES (%s, %s, %s)"
@@ -281,10 +286,11 @@ def add(username,password):
 def ifExist(username):
     # Connect to the database
     mydb = mysql.connector.connect(
-    host=mysql_host,
-    user=mysql_user,
-    password=mysql_password,
-    database=mysql_db
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        port=mysql_port,
+        database=mysql_db
     )
 
     # Create a cursor object
@@ -303,10 +309,11 @@ def ifExist(username):
 def if_Password_is_right(username, password):
     # Connect to the database
     mydb = mysql.connector.connect(
-    host=mysql_host,
-    user=mysql_user,
-    password=mysql_password,
-    database=mysql_db
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        port=mysql_port,
+        database=mysql_db
     )
     try:
         with mydb.cursor() as cursor:
@@ -331,6 +338,7 @@ def add_movie(username, movie):
         host=mysql_host,
         user=mysql_user,
         password=mysql_password,
+        port=mysql_port,
         database=mysql_db
         )
     cursor = cnx.cursor()
@@ -357,6 +365,7 @@ def Movie_list(username):
         host=mysql_host,
         user=mysql_user,
         password=mysql_password,
+        port=mysql_port,
         database=mysql_db
         )
     cursor = cnx.cursor()
