@@ -11,16 +11,17 @@ import tmdbsimple as tmdb
 import requests
 from werkzeug.wrappers import Request, Response
 import os
+from flask_sqlalchemy import SQLAlchemy
 
 
 # -------------------------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
+db = SQLAlchemy(app)
+print(db)
 
-print(os.environ.get('DB_HOST'))
-print(os.environ.get('DB_USER'))
-print(os.environ.get('DB_PASSWORD'))
-print(os.environ.get('DB_NAME'))
+
 mysql_host = os.environ.get('DB_HOST')
 mysql_user = os.environ.get('DB_USER')
 mysql_password = os.environ.get('DB_PASSWORD')
