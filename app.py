@@ -11,12 +11,23 @@ import tmdbsimple as tmdb
 import requests
 from werkzeug.wrappers import Request, Response
 import os
+from flask_sqlalchemy import SQLAlchemy
 
 
 # -------------------------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__)
-
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
+db = SQLAlchemy(app)
+print(os.environ.get('DB_HOST'))
+print(os.environ.get('DB_USER'))
+print(os.environ.get('DB_PASSWORD'))
+print(os.environ.get('DB_NAME'))
+mysql_host = os.environ.get('DB_HOST')
+mysql_user = os.environ.get('DB_USER')
+mysql_password = os.environ.get('DB_PASSWORD')
+mysql_db = os.environ.get('DB_NAME')
 # ---------------------------------------------------------Movie Recommondation--------------------------------------------
 
 
@@ -254,10 +265,10 @@ def nextMovie():
 ## regester the username and password to the database
 def add(username,password):
     mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Androwmaged3030",
-    database="MovieRecommender"
+    host=mysql_host,
+    user=mysql_user,
+    password=mysql_password,
+    database=mysql_db
     )
     mycursor = mydb.cursor()
     sql = "INSERT INTO user (Username, Password, Movies) VALUES (%s, %s, %s)"
@@ -276,10 +287,10 @@ def add(username,password):
 def ifExist(username):
     # Connect to the database
     mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Androwmaged3030",
-    database="MovieRecommender"
+    host=mysql_host,
+    user=mysql_user,
+    password=mysql_password,
+    database=mysql_db
     )
 
     # Create a cursor object
@@ -298,10 +309,10 @@ def ifExist(username):
 def if_Password_is_right(username, password):
     # Connect to the database
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Androwmaged3030",
-        database="MovieRecommender"
+    host=mysql_host,
+    user=mysql_user,
+    password=mysql_password,
+    database=mysql_db
     )
     try:
         with mydb.cursor() as cursor:
@@ -323,10 +334,10 @@ def if_Password_is_right(username, password):
 # add function that add a movie to the list of movies for every user
 def add_movie(username, movie):
     cnx = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Androwmaged3030",
-        database="MovieRecommender"
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        database=mysql_db
         )
     cursor = cnx.cursor()
     query = "SELECT Movies FROM user WHERE username = '"+username+"'"
@@ -349,10 +360,10 @@ def add_movie(username, movie):
 # returns the list of movies for corrosponds to the username
 def Movie_list(username):
     cnx = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Androwmaged3030",
-        database="MovieRecommender"
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        database=mysql_db
         )
     cursor = cnx.cursor()
     query = "SELECT Movies FROM user WHERE username = '"+username+"'"
