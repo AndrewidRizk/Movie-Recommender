@@ -1,12 +1,11 @@
 # Overview
-A website that uses IMDB and YouTube APIs, And stores the users Userename, Passowrd, and movie list in a SQL database. then uses his movie list to generate a recommended movie list according to his most watched genres.
+A website that uses TMDB and YouTube APIs, And stores the users Userename, Passowrd, and movie list in a SQL database. then uses his movie list to generate a recommended movie list according to his most watched genres.
 
 ![image](https://user-images.githubusercontent.com/97995173/215014937-91e47e81-62c0-438d-8221-45119b5b36ff.png)
 
 
 # packages to install ⬇
 - pip install flask
-- pip install imdbpy
 - pip install --upgrade google-api-python-client
 - pip install mysql-connector-python
 
@@ -39,7 +38,7 @@ When you add a movie in your movie list the recommender will recommend movies de
 
 ![image](https://user-images.githubusercontent.com/97995173/215024766-ce13ee05-3699-4c00-b990-0ac8d0ac97b4.png)
 
-And the more movie you add the best the recommended movies 
+And the more movie you add the better the recommended movies 
 
 
 
