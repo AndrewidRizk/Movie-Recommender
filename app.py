@@ -270,7 +270,7 @@ def get_db_connection():
         'password': os.environ.get('DB_PASSWORD'),
         'port': 3306  # Default port is 3306
     }
-    attempts = 3
+    attempts = 10
     for attempt in range(1, attempts + 1):
         try:
             conn = mysql.connector.connect(**db_config)
