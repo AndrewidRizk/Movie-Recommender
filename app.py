@@ -27,7 +27,7 @@ mysql_db= os.environ.get('DB_NAME')
 # ---------------------------------------------------------Movie Recommondation--------------------------------------------
 
 
-# TMDb API key (replace 'YOUR_API_KEY' with your actual API key)
+# TMDb API key 
 tmdb.API_KEY = '4ea0432fe4d2e57ddd43b5aee68d817b'
 API_KEY = '4ea0432fe4d2e57ddd43b5aee68d817b'
 
@@ -257,17 +257,22 @@ def nextMovie():
 
 # ------------------------------------------------MYSQL-------------------------------------------------------
 
+# Verify the environment variables are loaded correctly
+print(f"Host: {mysql_host}, User: {mysql_user}, Password: {mysql_password}, Port: {mysql_port}, DB: {mysql_db}")
 
-
-## regester the username and password to the database
-def add(username,password):
-    mydb = mysql.connector.connect(
+# Function to connect to the database
+def get_db_connection():
+    return mysql.connector.connect(
         host=mysql_host,
         user=mysql_user,
         password=mysql_password,
         port=mysql_port,
         database=mysql_db
     )
+
+## regester the username and password to the database
+def add(username,password):
+    mydb = get_db_connection()
     mycursor = mydb.cursor()
     sql = "INSERT INTO user (Username, Password, Movies) VALUES (%s, %s, %s)"
     val = (username, password," ")
@@ -284,13 +289,7 @@ def add(username,password):
 ## Checking if the name is in the data base
 def ifExist(username):
     # Connect to the database
-    mydb = mysql.connector.connect(
-        host=mysql_host,
-        user=mysql_user,
-        password=mysql_password,
-        port=mysql_port,
-        database=mysql_db
-    )
+    mydb = get_db_connection()
 
     # Create a cursor object
     mycursor = mydb.cursor()
@@ -307,13 +306,7 @@ def ifExist(username):
 ## Checking if the name is in the data base
 def if_Password_is_right(username, password):
     # Connect to the database
-    mydb = mysql.connector.connect(
-        host=mysql_host,
-        user=mysql_user,
-        password=mysql_password,
-        port=mysql_port,
-        database=mysql_db
-    )
+    mydb = get_db_connection()
     try:
         with mydb.cursor() as cursor:
             # Execute the SELECT statement to retrieve the stored password for the given username
@@ -333,13 +326,7 @@ def if_Password_is_right(username, password):
 
 # add function that add a movie to the list of movies for every user
 def add_movie(username, movie):
-    cnx = mysql.connector.connect(
-        host=mysql_host,
-        user=mysql_user,
-        password=mysql_password,
-        port=mysql_port,
-        database=mysql_db
-        )
+    cnx = get_db_connection()
     cursor = cnx.cursor()
     query = "SELECT Movies FROM user WHERE username = '"+username+"'"
     cursor.execute(query)
@@ -360,13 +347,7 @@ def add_movie(username, movie):
 
 # returns the list of movies for corrosponds to the username
 def Movie_list(username):
-    cnx = mysql.connector.connect(
-        host=mysql_host,
-        user=mysql_user,
-        password=mysql_password,
-        port=mysql_port,
-        database=mysql_db
-        )
+    cnx = get_db_connection()
     cursor = cnx.cursor()
     query = "SELECT Movies FROM user WHERE username = '"+username+"'"
     cursor.execute(query)
