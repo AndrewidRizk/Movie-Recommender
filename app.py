@@ -262,13 +262,24 @@ print(f"Host: {mysql_host}, User: {mysql_user}, Password: {mysql_password}, Port
 
 # Function to connect to the database
 def get_db_connection():
-    return mysql.connector.connect(
-        host=mysql_host,
-        user=mysql_user,
-        password=mysql_password,
-        port=mysql_port,
-        database=mysql_db
-    )
+    # MySQL configurations
+    db_config = {
+        'host': os.environ.get('DB_HOST'),
+        'database': os.environ.get('DB_NAME'),
+        'user': os.environ.get('DB_USER'),
+        'password': os.environ.get('DB_PASSWORD'),
+        'port': 3306  # Default port is 3306
+    }
+    attempts = 3
+    for attempt in range(1, attempts + 1):
+        try:
+            conn = mysql.connector.connect(**db_config)
+            return conn
+        except mysql.connector.Error as err:
+            print(f"Attempt {attempt} to connect to the database failed: {err}")
+            if attempt == attempts:
+                print(f"Unable to connect to the database after {attempts} attempts.")
+                return None
 
 ## regester the username and password to the database
 def add(username,password):
